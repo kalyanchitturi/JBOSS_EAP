@@ -1,0 +1,7 @@
+---
+- name: copy file to temp
+  copy:
+    #src: "{{ nmonfile }}"
+    src: /tmp/nmon_logging/ttnwascllt3_190507_0855.nmon
+    dest: /tmp/SL
+    delegate_to: ttnwascllt4.courts.judiciary.state.nj.us   

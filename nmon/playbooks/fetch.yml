@@ -1,0 +1,6 @@
+---
+- name:                     stop IHS 
+  hosts:                    all
+  roles:
+    - roles/nmonfetch
+   

@@ -1,0 +1,31 @@
+---
+- name: set date 
+  shell: "date +%y%m%d"
+  register: date
+
+- name: display results
+  debug:
+     msg: "{{ date }}"
+  
+- name : Set Variables 
+  set_fact:
+   cur_date: "{{ date.stdout }}"
+
+- name: find files with today date
+  find: 
+     paths: "{{ nmon_path }}"
+    # age_stamp: mtime
+     patterns: "{{ ansible_hostname }}_{{ cur_date}}.nmon"
+  register: nmonfile
+
+- name: display results
+  debug:
+     msg: "{{ nmonfile }}"
+
+- name: copy file to temp
+  copy:
+    #src: "{{ nmonfile }}"
+    src: "{{ item.path }}"
+    dest: /tmp/SL
+    remote_src: yes     
+  with_items: "{{ nmonfile.files }}"

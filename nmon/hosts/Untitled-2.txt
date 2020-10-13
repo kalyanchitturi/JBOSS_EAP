@@ -1,0 +1,25 @@
+- name: start epagent 
+  command: "dzdo su - wasuser -c '{{ epagent_home }}/epagent/bin/EPACtrl.sh start'"
+  when: extracted.extract_results.rc == 0
+
+  - name: grep process epagent
+  command: "ps -ef |grep -i epagent"
+
+
+  lineinfile
+  - name: update log path 
+  lineinfile: 
+    dest: "{{ epagent_home }}/epagent/bin/EPACtrl.sh"
+    regexp: '^PIDFILE= '
+    replace: 'PIDFILE="/opt/epagent/epa.pid"'
+    backup: yes
+
+
+    - name: update log path 
+  replace: 
+    dest: "{{ epagent_home }}/epagent/bin/EPACtrl.sh"
+    regexp: "^PIDFILE= (.*)$ "
+    line: 'PIDFILE="/opt/epagent/epa.pid"'
+  register: update
+- debug: 
+     msg: "{{ update }}"

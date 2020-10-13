@@ -1,0 +1,36 @@
+---
+- name: find files older than 30 mins 
+  find: 
+     paths: "{{ nmon_path }}"
+    # age_stamp: mtime
+     age: "-2h"
+  register: nmonfile
+
+- name: display results
+  debug:
+     msg: "{{ nmonfile }}"
+
+- name: copy file to temp
+  copy:
+    #src: "{{ nmonfile }}"
+    src: "{{ item.path }}"
+    dest: /tmp/SL
+    remote_src: yes     
+  with_items: "{{ nmonfile.files }}"
+  
+    
+
+#- name: copy file to temp
+ # fetch:
+  #  src: "{{ nmonfile }}"
+  #  flat: yes
+   # dest: /tmp/
+  #delegate_to: ttnwascllt3
+  #check_mode: no
+    #remote_src: yes
+  #with_items: "{{ nmonfile.files }}"
+  #register: nmonfile1
+
+- name: display results
+  debug:
+     var: ansible_date_time
